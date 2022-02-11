@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Mensaje from './Mensaje';
 
-const NuevoPresupuesto = ({presupuesto, setPresupuesto}) => {
+const NuevoPresupuesto = ({presupuesto, setPresupuesto, setIfValid}) => {
     //Hooks
     const [mensaje, setMensaje] = useState({})
 
@@ -11,14 +11,15 @@ const NuevoPresupuesto = ({presupuesto, setPresupuesto}) => {
             msg: '',
             tipo: ''
         }
-        if(!Number(presupuesto) || Number(presupuesto) < 0){
+        if(!presupuesto || presupuesto < 0){
             mensajeObj.msg = "No es un presupesto valido"
             mensajeObj.tipo = "error"
             setMensaje(mensajeObj)
         }else{
-            mensajeObj.msg = "Presupesto valido"
-            mensajeObj.tipo = "success"
-            setMensaje(mensajeObj)
+            //mensajeObj.msg = "Presupesto valido"
+            //mensajeObj.tipo = "success"
+            setMensaje("")
+            setIfValid(true)
         }
     }
   return (
@@ -28,10 +29,10 @@ const NuevoPresupuesto = ({presupuesto, setPresupuesto}) => {
                 <label>Definir presupuesto</label>
                 <input
                     className='nuevo-presupuesto'
-                    type='text'
+                    type='number'
                     placeholder='Añade tu presupesto'
                     value={presupuesto}
-                    onChange={(e)=>setPresupuesto(e.target.value)}
+                    onChange={(e)=>setPresupuesto(Number(e.target.value))}
                 />
                 <input type='submit' value='Añadir'/>
             </div>
