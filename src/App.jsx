@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './App.css'
 import Header from './components/Header'
+import Modal from './components/Modal'
 import IconoNuevo from './img/nuevo-gasto.svg'
 
 function App() {
@@ -34,7 +35,9 @@ function App() {
       }
       {
         modal && 
-        <p>fsdhfkhsfalhas</p>
+       <Modal 
+        setModal = {setModal}
+       />
       }
      
     </div>
