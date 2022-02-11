@@ -146,6 +146,9 @@ header h1 {
   color: #b91c1c;
 }
 .alerta.success {
+  background-color: var(--blanco);
+  border-left: 5px solid var(--azul);
+  color: var(--azul);
 }
 
 .contenedor {
