@@ -52,7 +52,6 @@ header h1 {
     margin: 0;
     color: var(--blanco);
     text-align: center;
-
     text-transform: uppercase;
 }
 
@@ -110,6 +109,7 @@ header h1 {
     font-size: 1.9rem;
     width: 100%;
     transition: background-color 300ms ease;
+    border-radius: 10px;
 }
 @media (min-width: 768px) {
     .formulario input[type="submit"] {
