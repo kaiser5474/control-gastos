@@ -3,14 +3,22 @@ import Mensaje from './Mensaje';
 
 const NuevoPresupuesto = ({presupuesto, setPresupuesto}) => {
     //Hooks
-    const [mensaje, setMensaje] = useState("")
+    const [mensaje, setMensaje] = useState({})
 
     const handlePresupuesto = (e) => {
         e.preventDefault();
+        const mensajeObj = {
+            msg: '',
+            tipo: ''
+        }
         if(!Number(presupuesto) || Number(presupuesto) < 0){
-            setMensaje("No es un presupesto valido")
+            mensajeObj.msg = "No es un presupesto valido"
+            mensajeObj.tipo = "error"
+            setMensaje(mensajeObj)
         }else{
-            setMensaje("Presupesto valido")
+            mensajeObj.msg = "Presupesto valido"
+            mensajeObj.tipo = "success"
+            setMensaje(mensajeObj)
         }
     }
   return (
