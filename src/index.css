@@ -5,6 +5,7 @@
   --gris: #94a3b8;
   --gris-oscuro: #64748b;
   --negro: #000;
+  --red: rgb(235, 13, 13);
 }
 
 body {
@@ -395,7 +396,7 @@ body .modal {
 }
 
 .swipe-action__trailing {
-  background-color: #db2777;
+  background-color: var(--red);
   margin-bottom: 2rem;
   color: var(--blanco);
 }
@@ -414,6 +415,6 @@ body .modal {
   z-index: -1;
 }
 
-.espacioFinal { 
+.espacioFinal {
   margin-bottom: 6rem;
 }

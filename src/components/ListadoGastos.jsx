@@ -1,32 +1,31 @@
 import React from 'react'
 import Gasto from './Gasto'
 
-const Gastos = ({gastos, modal}) => {  
+const Gastos = ({
+    gastos, 
+    setGastoEditar, 
+    setModal,  
+    transiccion, 
+    setTransiccion, 
+    modal, 
+    setGastoEliminar}) => {  
   return (
-    <div className={`listado-gastos contenedor`}>
+    <div className='listado-gastos contenedor'>
         <h2>{gastos.length ? 'Gastos' : 'No hay gastos aún'}</h2>
             {
                 gastos.map((gasto) => {
-                    <Gasto 
+                    return <Gasto 
                         key = {gasto.id}
                         gasto = {gasto}
+                        setGastoEditar = {setGastoEditar}
+                        setModal = {setModal}
+                        transiccion = {transiccion}
+                        setTransiccion = {setTransiccion}
+                        modal = {modal}
+                        setGastoEliminar = {setGastoEliminar}
                     />
                 })
             }
-        {/* <div>
-            <p>Grafica aqui</p>
-        </div>
-        <div className=''>
-            <p>
-                <span>Presupuesto: {''}</span>{gastos.nombre}
-            </p>
-            <p>
-                <span>Disponible: {''}</span>{gastos.cantidad}
-            </p>
-            <p>
-                <span>Gastado: {''}</span>{gastos.categoria}
-            </p>
-        </div> */}
     </div>
   )
 }

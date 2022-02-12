@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import cerrar from './../img/cerrar.svg'
 import Mensaje from './Mensaje'
 
@@ -7,23 +7,16 @@ const Modal = ({
     transiccion, 
     setTransiccion, 
     guardarGasto, 
-    gastos
+    gastos,
+    gastoEditar, 
+    setGastoEditar
 }) => {
     //hooks 
     const [nombre, setNombre] = useState("")
     const [cantidad, setCantidad] = useState("")
     const [categoria, setCategoria] = useState("")
     const [mensaje, setMensaje] = useState({})
-
-    const cerrarModal = () => {
-        setTransiccion(false)
-        setNombre("")
-        setCantidad("")
-        setCategoria("")
-        setTimeout(() => {
-            setModal(false)
-          }, 500);
-    }
+    const [editando, setEditando] = useState(false)
 
     //funciones
     const handleSubmit = (e) => {
@@ -38,29 +31,64 @@ const Modal = ({
             categoria,
             id: gastos.id
         }
-        if([nombre, cantidad, categoria].includes('')){
+        
+        //validando que todos los campos esten llenos
+        if([nombre, cantidad, categoria].includes('')){            
             mensajeObj.msg = "Todos los campos son obligatorios"
             mensajeObj.tipo = "error"
             setMensaje(mensajeObj)
         }else{    
-            setMensaje({})
-            guardarGasto(gastoObj)
+            // si todo los campos estan llenos y estamos editando ejecuta las siguientes lineas de codigo
+            if(editando){       
+                gastoObj.id = gastoEditar.id
+                gastoObj.fecha = gastoEditar.fecha
+                setGastoEditar(gastoObj)
+            }
+            //si no estamos editando es que estamos insertando por lo tanto ejecuta las siguientes lineas
+            else{
+                setMensaje({})
+                guardarGasto(gastoObj)
+            }    
             cerrarModal();
         }        
-        //
+      }
+
+    // aqui establecemos todos los campos por defecto y cerramos el modal
+    const cerrarModal = () => {
+        setTransiccion(false)
+        setNombre("")
+        setCantidad("")
+        setCategoria("")
+        setTimeout(() => {
+            setModal(false)
+          }, 300);
     }
+    
+    useEffect(() => {        
+        //compruebo que gastoEditar tenga algun valor
+        if(Object.keys(gastoEditar).length > 0){
+            setNombre(gastoEditar.nombre)
+            setCantidad(gastoEditar.cantidad)
+            setCategoria(gastoEditar.categoria)
+            setEditando(true)
+        }        
+    }, [])
+
   return (
-    <div className='modal'>        
-        <img 
-            className='cerrar-modal'
-            src={cerrar}
-            onClick={cerrarModal}
-        />
+    <div className='modal'>   
+        <div className="cerrar-modal">   
+            <img 
+                className='cerrar-modal'
+                src={cerrar}
+                onClick={cerrarModal}
+            />
+        </div>  
         <form 
             onSubmit={(e)=> handleSubmit(e)} 
             className={`formulario ${transiccion ? 'animar' : 'cerrar'}`}
-        >
-            <legend>Nuevo Gasto</legend>
+        >            
+            <legend>{editando ? 'Editando Gasto' : 'Nuevo Gasto'}</legend>    
+            
             { mensaje && <Mensaje mensaje = {mensaje}/>  }
             <div className='campo'>
                 <label htmlFor='nombre'>Nombre Gasto</label>
@@ -97,15 +125,15 @@ const Modal = ({
                     <option value='casa'>Casa</option>
                     <option value='gastos'>Gastos Varios</option>
                     <option value='salud'>Salud</option>
+                    <option value='ocio'>Ocio</option>
                     <option value='suscripciones'>Suscripciones</option>
                 </select>
             </div>
             
             <input
-                type='submit'
-                value='Añadir Gasto'
-            />
-            
+            type='submit'
+            value={`${editando ? 'Guardar Cambios' : 'Añadir Gasto'}`}
+            />           
         </form>
     </div>
   )

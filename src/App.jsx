@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import ListadoGastos from './components/ListadoGastos'
 import Header from './components/Header'
@@ -9,34 +9,56 @@ import { paraId } from './helpers'
 function App() {
   //Hooks
   const [presupuesto, setPresupuesto] = useState(0)
-  const [disponible, setDisponible] = useState(0)
-  const [gastado, setGastado] = useState(0)
   const [ifValid, setIfValid] = useState(false)
   const [modal, setModal] = useState(false)
   const [transiccion, setTransiccion] = useState(false)
   const [gastos, setGastos] = useState([])
+  const [gastoEditar, setGastoEditar] = useState({})
+  const [gastoEliminar, setGastoEliminar] = useState({})
 
   //funciones
   const handleNuevoGasto = () => {
     setModal(true)
+    setGastoEditar({})
     setTimeout(() => {
       setTransiccion(true)
-    }, 500);
+    }, 300);
   }
 
   const guardarGasto = (gasto) => {
     gasto.id = paraId()
-    console.log(gasto)
+    gasto.fecha = Date.now()
     setGastos([...gastos, gasto])
   }
 
+  //use effect de editar
+  useEffect(() => {
+    const gastosActualizados = gastos.map((gasto) => {
+      if(gasto.id === gastoEditar.id){
+        return gastoEditar
+      }else{
+        return gasto
+      }
+    })
+    setGastos(gastosActualizados)
+  }, [gastoEditar])
+  
+  //use effect de eliminar
+  useEffect(() => {
+    const gastosActualizados = gastos.filter((gasto) => {
+      return gasto.id !== gastoEliminar.id
+    })
+    setGastos(gastosActualizados)
+  }, [gastoEliminar])
+
   return (
-    <div>
+    <div className={modal ? 'fijar' : ''}>
       <Header
         presupuesto = {presupuesto}
         setPresupuesto = {setPresupuesto}
         ifValid= {ifValid}
         setIfValid= {setIfValid}
+        gastos={gastos}        
       />
 
       {
@@ -47,6 +69,8 @@ function App() {
         setTransiccion = {setTransiccion}
         guardarGasto = {guardarGasto}
         gastos = {gastos}
+        gastoEditar = {gastoEditar}
+        setGastoEditar = {setGastoEditar}
        />
       }
       {
@@ -55,21 +79,13 @@ function App() {
             <main>
               <ListadoGastos
                 gastos = {gastos}
+                setGastoEditar = {setGastoEditar}
+                setModal = {setModal}
+                transiccion = {transiccion}
+                setTransiccion = {setTransiccion}
+                modal = {modal}
+                setGastoEliminar = {setGastoEliminar}
               />
-            {/* {(
-          gastos.map((gasto)=> {
-            return (
-              <>
-            <Gastos
-              key = {gasto.id}
-              gasto = {gasto}
-              ifValid = {ifValid}
-              modal = {modal}
-            />
-            </>
-            )
-          })
-        )} */}
             </main>
             <div className='nuevo-gasto'>
               <img 
@@ -81,9 +97,6 @@ function App() {
             </div>
           </>
         )
-      }
-      {
-        
       }
     </div>
 
