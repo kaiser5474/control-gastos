@@ -61,6 +61,7 @@ const Modal = ({
         setCategoria("")
         setTimeout(() => {
             setModal(false)
+            setGastoEditar({})
           }, 300);
     }
     

@@ -14,7 +14,7 @@ function App() {
   const [transiccion, setTransiccion] = useState(false)
   const [gastos, setGastos] = useState([])
   const [gastoEditar, setGastoEditar] = useState({})
-  const [gastoEliminar, setGastoEliminar] = useState({})
+  const [gastoEliminar, setGastoEliminar] = useState("")
 
   //funciones
   const handleNuevoGasto = () => {
@@ -33,22 +33,16 @@ function App() {
 
   //use effect de editar
   useEffect(() => {
-    const gastosActualizados = gastos.map((gasto) => {
-      if(gasto.id === gastoEditar.id){
-        return gastoEditar
-      }else{
-        return gasto
-      }
-    })
+    const gastosActualizados = gastos.map( gastoState => gastoState.id === gastoEditar.id ? gastoEditar : gastoState)
     setGastos(gastosActualizados)
+    //
   }, [gastoEditar])
   
   //use effect de eliminar
   useEffect(() => {
-    const gastosActualizados = gastos.filter((gasto) => {
-      return gasto.id !== gastoEliminar.id
-    })
+    const gastosActualizados = gastos.filter((gastos) => gastos.id !== gastoEliminar)
     setGastos(gastosActualizados)
+    setGastoEliminar("")
   }, [gastoEliminar])
 
   return (

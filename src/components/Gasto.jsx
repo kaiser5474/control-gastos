@@ -45,10 +45,10 @@ const Gasto = ({
           }, 300);
     }
 
-    const eliminarGasto = (gasto) => {
+    const eliminarGasto = () => {
         if(confirm("Esta seguro en eliminar el gasto!!"))
         {
-            setGastoEliminar(gasto)
+            setGastoEliminar(gasto.id)
         }
        
     }
@@ -63,9 +63,8 @@ const Gasto = ({
     
       const trailingActions = () => (
         <TrailingActions>
-          <SwipeAction
-            // destructive={true}
-            onClick={() => eliminarGasto(gasto)}
+          <SwipeAction      
+            onClick={() => eliminarGasto()}
           >
             Eliminar
           </SwipeAction>
