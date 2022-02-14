@@ -5,6 +5,7 @@ import Header from './components/Header'
 import Modal from './components/Modal'
 import IconoNuevo from './img/nuevo-gasto.svg'
 import { paraId } from './helpers'
+import Filtros from './components/Filtros'
 
 function App() {
   //Hooks
@@ -14,7 +15,9 @@ function App() {
   const [transiccion, setTransiccion] = useState(false)
   const [gastos, setGastos] = useState(JSON.parse(localStorage.getItem('gastos')) ?? [])
   const [gastoEditar, setGastoEditar] = useState({})
-  const [gastoEliminar, setGastoEliminar] = useState("")
+  const [gastoEliminar, setGastoEliminar] = useState('')
+  const [filtro, setFiltro] = useState('')
+  const [gastoFiltrado, setGastoFiltrado] = useState([])
 
   //funciones
   const handleNuevoGasto = () => {
@@ -63,6 +66,15 @@ function App() {
     localStorage.setItem("gastos", JSON.stringify(gastos))
   }, [gastos])
 
+  //useEffect para filtrar los gastos, se almacena en un State nuevo
+  useEffect(() => {
+    if(filtro){
+      const gastosFiltrados = gastos.filter(gasto => gasto.categoria === filtro && gasto)
+      setGastoFiltrado(gastosFiltrados)
+    }   
+  }, [filtro])
+  
+
   return (
     <div className={modal ? 'fijar' : ''}>
       <Header
@@ -72,7 +84,6 @@ function App() {
         setIfValid= {setIfValid}
         gastos={gastos}        
       />
-
       {
         modal && 
        <Modal 
@@ -89,7 +100,12 @@ function App() {
         ifValid && (
           <>
             <main>
-              <ListadoGastos
+              <Filtros
+                filtro = {filtro}
+                setFiltro = {setFiltro}
+              />
+              {!filtro ?
+                <ListadoGastos
                 gastos = {gastos}
                 setGastoEditar = {setGastoEditar}
                 setModal = {setModal}
@@ -98,6 +114,16 @@ function App() {
                 modal = {modal}
                 setGastoEliminar = {setGastoEliminar}
               />
+              : <ListadoGastos
+                gastos = {gastoFiltrado}
+                setGastoEditar = {setGastoEditar}
+                setModal = {setModal}
+                transiccion = {transiccion}
+                setTransiccion = {setTransiccion}
+                modal = {modal}
+                setGastoEliminar = {setGastoEliminar}
+            />
+              }              
             </main>
             <div className='nuevo-gasto'>
               <img 

@@ -49,8 +49,7 @@ const Gasto = ({
         if(confirm("Esta seguro en eliminar el gasto!!"))
         {
             setGastoEliminar(gasto.id)
-        }
-       
+        }       
     }
 
     const leadingActions = () => (
