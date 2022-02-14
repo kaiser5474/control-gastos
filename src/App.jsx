@@ -34,10 +34,17 @@ function App() {
     setGastos([...gastos, gasto])
   }
 
-  //use effect de editar
+  //use effect de editar todos los gastos
   useEffect(() => {
     const gastosActualizados = gastos.map( gastoState => gastoState.id === gastoEditar.id ? gastoEditar : gastoState)
     setGastos(gastosActualizados)
+    //
+  }, [gastoEditar])
+
+  //use effect de editar todos los gastos que fueron filtrados
+  useEffect(() => {
+    const gastosActualizados = gastoFiltrado.map( gastoState => gastoState.id === gastoEditar.id ? gastoEditar : gastoState)
+    setGastoFiltrado(gastosActualizados)
     //
   }, [gastoEditar])
   
@@ -45,6 +52,13 @@ function App() {
   useEffect(() => {
     const gastosActualizados = gastos.filter((gastos) => gastos.id !== gastoEliminar)
     setGastos(gastosActualizados)
+    setGastoEliminar("")
+  }, [gastoEliminar])
+
+  //use effect de eliminar los gastos que fueron filtrados
+  useEffect(() => {
+    const gastosActualizados = gastoFiltrado.filter((gastos) => gastos.id !== gastoEliminar)
+    setGastoFiltrado(gastosActualizados)
     setGastoEliminar("")
   }, [gastoEliminar])
 
@@ -103,27 +117,18 @@ function App() {
               <Filtros
                 filtro = {filtro}
                 setFiltro = {setFiltro}
-              />
-              {!filtro ?
-                <ListadoGastos
+              />              
+              <ListadoGastos
                 gastos = {gastos}
+                gastoFiltrado = {gastoFiltrado}
                 setGastoEditar = {setGastoEditar}
                 setModal = {setModal}
                 transiccion = {transiccion}
                 setTransiccion = {setTransiccion}
                 modal = {modal}
                 setGastoEliminar = {setGastoEliminar}
-              />
-              : <ListadoGastos
-                gastos = {gastoFiltrado}
-                setGastoEditar = {setGastoEditar}
-                setModal = {setModal}
-                transiccion = {transiccion}
-                setTransiccion = {setTransiccion}
-                modal = {modal}
-                setGastoEliminar = {setGastoEliminar}
-            />
-              }              
+                filtro = {filtro}
+              />                   
             </main>
             <div className='nuevo-gasto'>
               <img 

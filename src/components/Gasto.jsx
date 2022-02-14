@@ -33,7 +33,8 @@ const Gasto = ({
     setModal, 
     setTransiccion, 
     modal,  
-    setGastoEliminar}) => {
+    setGastoEliminar,
+    filtro}) => {
     const {nombre, categoria, id, cantidad, fecha} = gasto
 
     //funciones 
