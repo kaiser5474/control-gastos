@@ -8,13 +8,11 @@ import { paraId } from './helpers'
 
 function App() {
   //Hooks
-  const [presupuesto, setPresupuesto] = useState(
-    Number(localStorage.getItem('presupuesto' ?? 0))
-  )
+  const [presupuesto, setPresupuesto] = useState(Number(localStorage.getItem('presupuesto' ?? 0)) )
   const [ifValid, setIfValid] = useState(false)
   const [modal, setModal] = useState(false)
   const [transiccion, setTransiccion] = useState(false)
-  const [gastos, setGastos] = useState([])
+  const [gastos, setGastos] = useState(JSON.parse(localStorage.getItem('gastos')) ?? [])
   const [gastoEditar, setGastoEditar] = useState({})
   const [gastoEliminar, setGastoEliminar] = useState("")
 
@@ -47,16 +45,23 @@ function App() {
     setGastoEliminar("")
   }, [gastoEliminar])
 
+  //useEffect para guardar el presupesto
   useEffect(() => {
     localStorage.setItem("presupuesto", presupuesto ?? 0)
   }, [presupuesto])
 
+  //useEffect para decir que si tenemos algo mayor a 0 en localStorage se ponga presupesto valido
   useEffect(() => {
     const presupuestoLS = Number(localStorage.getItem('presupuesto' ?? 0))
     if(presupuestoLS > 0){
       setIfValid(true)
     }
   }, [])
+
+  //useEffect para guardar los gastos
+  useEffect(() => {
+    localStorage.setItem("gastos", JSON.stringify(gastos))
+  }, [gastos])
 
   return (
     <div className={modal ? 'fijar' : ''}>
