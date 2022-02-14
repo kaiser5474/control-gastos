@@ -8,7 +8,9 @@ import { paraId } from './helpers'
 
 function App() {
   //Hooks
-  const [presupuesto, setPresupuesto] = useState(0)
+  const [presupuesto, setPresupuesto] = useState(
+    Number(localStorage.getItem('presupuesto' ?? 0))
+  )
   const [ifValid, setIfValid] = useState(false)
   const [modal, setModal] = useState(false)
   const [transiccion, setTransiccion] = useState(false)
@@ -44,6 +46,17 @@ function App() {
     setGastos(gastosActualizados)
     setGastoEliminar("")
   }, [gastoEliminar])
+
+  useEffect(() => {
+    localStorage.setItem("presupuesto", presupuesto ?? 0)
+  }, [presupuesto])
+
+  useEffect(() => {
+    const presupuestoLS = Number(localStorage.getItem('presupuesto' ?? 0))
+    if(presupuestoLS > 0){
+      setIfValid(true)
+    }
+  }, [])
 
   return (
     <div className={modal ? 'fijar' : ''}>
