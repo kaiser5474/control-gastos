@@ -117,6 +117,7 @@ function App() {
               <Filtros
                 filtro = {filtro}
                 setFiltro = {setFiltro}
+                setGastoFiltrado = {setGastoFiltrado}
               />              
               <ListadoGastos
                 gastos = {gastos}

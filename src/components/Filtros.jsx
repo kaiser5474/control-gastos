@@ -1,6 +1,14 @@
 import React, {useState} from 'react'
 
-const Filtros = ({filtro, setFiltro}) => {
+const Filtros = ({filtro, setFiltro, setGastoFiltrado}) => {
+
+    const trabajoFiltro = (e) => {
+        const filtroValue = e.target.value 
+        setFiltro(filtroValue)
+        if(filtroValue === ''){
+            setGastoFiltrado([]) 
+        }
+    }
   return (
     <div className='filtros sombra contenedor'>
         <form>
@@ -8,7 +16,7 @@ const Filtros = ({filtro, setFiltro}) => {
                 <label>Filtrar Gastos</label>
                 <select 
                     value={filtro}
-                    onChange={(e) => setFiltro(e.target.value)}
+                    onChange={(e) => trabajoFiltro(e)}
                 >
                     <option value=''>-- Todas las categorías --</option>
                     <option value='ahorro'>Ahorro</option>
