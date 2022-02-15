@@ -1,150 +1,159 @@
-import { useEffect, useState } from 'react'
-import './App.css'
-import ListadoGastos from './components/ListadoGastos'
-import Header from './components/Header'
-import Modal from './components/Modal'
-import IconoNuevo from './img/nuevo-gasto.svg'
-import { paraId } from './helpers'
-import Filtros from './components/Filtros'
+import { useEffect, useState } from "react";
+import "./App.css";
+import ListadoGastos from "./components/ListadoGastos";
+import Header from "./components/Header";
+import Modal from "./components/Modal";
+import IconoNuevo from "./img/nuevo-gasto.svg";
+import { paraId } from "./helpers";
+import Filtros from "./components/Filtros";
 
 function App() {
   //Hooks
-  const [presupuesto, setPresupuesto] = useState(Number(localStorage.getItem('presupuesto' ?? 0)) )
-  const [ifValid, setIfValid] = useState(false)
-  const [modal, setModal] = useState(false)
-  const [transiccion, setTransiccion] = useState(false)
-  const [gastos, setGastos] = useState(JSON.parse(localStorage.getItem('gastos')) ?? [])
-  const [gastoEditar, setGastoEditar] = useState({})
-  const [gastoEliminar, setGastoEliminar] = useState('')
-  const [filtro, setFiltro] = useState('')
-  const [gastoFiltrado, setGastoFiltrado] = useState([])
+  const [presupuesto, setPresupuesto] = useState(
+    Number(localStorage.getItem("presupuesto" ?? 0))
+  );
+  const [ifValid, setIfValid] = useState(false);
+  const [modal, setModal] = useState(false);
+  const [transiccion, setTransiccion] = useState(false);
+  const [gastos, setGastos] = useState(
+    JSON.parse(localStorage.getItem("gastos")) ?? []
+  );
+  const [gastoEditar, setGastoEditar] = useState({});
+  const [gastoEliminar, setGastoEliminar] = useState("");
+  const [filtro, setFiltro] = useState("");
+  const [gastoFiltrado, setGastoFiltrado] = useState([]);
 
   //funciones
   const handleNuevoGasto = () => {
-    setModal(true)
-    setGastoEditar({})
+    setModal(true);
+    setGastoEditar({});
     setTimeout(() => {
-      setTransiccion(true)
+      setTransiccion(true);
     }, 300);
-  }
+  };
 
   const guardarGasto = (gasto) => {
-    gasto.id = paraId()
-    gasto.fecha = Date.now()
-    setGastos([...gastos, gasto])
-  }
+    gasto.id = paraId();
+    gasto.fecha = Date.now();
+    setGastos([...gastos, gasto]);
+  };
 
   //use effect de editar todos los gastos
   useEffect(() => {
-    const gastosActualizados = gastos.map( gastoState => gastoState.id === gastoEditar.id ? gastoEditar : gastoState)
-    setGastos(gastosActualizados)
+    const gastosActualizados = gastos.map((gastoState) =>
+      gastoState.id === gastoEditar.id ? gastoEditar : gastoState
+    );
+    setGastos(gastosActualizados);
     //
-  }, [gastoEditar])
+  }, [gastoEditar]);
 
   //use effect de editar todos los gastos que fueron filtrados
   useEffect(() => {
-    const gastosActualizados = gastoFiltrado.map( gastoState => gastoState.id === gastoEditar.id ? gastoEditar : gastoState)
-    setGastoFiltrado(gastosActualizados)
+    const gastosActualizados = gastoFiltrado.map((gastoState) =>
+      gastoState.id === gastoEditar.id ? gastoEditar : gastoState
+    );
+    setGastoFiltrado(gastosActualizados);
     //
-  }, [gastoEditar])
-  
+  }, [gastoEditar]);
+
   //use effect de eliminar
   useEffect(() => {
-    const gastosActualizados = gastos.filter((gastos) => gastos.id !== gastoEliminar)
-    setGastos(gastosActualizados)
-    setGastoEliminar("")
-  }, [gastoEliminar])
+    const gastosActualizados = gastos.filter(
+      (gastos) => gastos.id !== gastoEliminar
+    );
+    setGastos(gastosActualizados);
+    setGastoEliminar("");
+  }, [gastoEliminar]);
 
   //use effect de eliminar los gastos que fueron filtrados
   useEffect(() => {
-    const gastosActualizados = gastoFiltrado.filter((gastos) => gastos.id !== gastoEliminar)
-    setGastoFiltrado(gastosActualizados)
-    setGastoEliminar("")
-  }, [gastoEliminar])
+    const gastosActualizados = gastoFiltrado.filter(
+      (gastos) => gastos.id !== gastoEliminar
+    );
+    setGastoFiltrado(gastosActualizados);
+    setGastoEliminar("");
+  }, [gastoEliminar]);
 
   //useEffect para guardar el presupesto
   useEffect(() => {
-    localStorage.setItem("presupuesto", presupuesto ?? 0)
-  }, [presupuesto])
+    localStorage.setItem("presupuesto", presupuesto ?? 0);
+  }, [presupuesto]);
 
   //useEffect para decir que si tenemos algo mayor a 0 en localStorage se ponga presupesto valido
   useEffect(() => {
-    const presupuestoLS = Number(localStorage.getItem('presupuesto' ?? 0))
-    if(presupuestoLS > 0){
-      setIfValid(true)
+    const presupuestoLS = Number(localStorage.getItem("presupuesto" ?? 0));
+    if (presupuestoLS > 0) {
+      setIfValid(true);
     }
-  }, [])
+  }, []);
 
   //useEffect para guardar los gastos
   useEffect(() => {
-    localStorage.setItem("gastos", JSON.stringify(gastos))
-  }, [gastos])
+    localStorage.setItem("gastos", JSON.stringify(gastos));
+  }, [gastos]);
 
   //useEffect para filtrar los gastos, se almacena en un State nuevo
   useEffect(() => {
-    if(filtro){
-      const gastosFiltrados = gastos.filter(gasto => gasto.categoria === filtro && gasto)
-      setGastoFiltrado(gastosFiltrados)
-    }   
-  }, [filtro])
-  
+    if (filtro) {
+      const gastosFiltrados = gastos.filter(
+        (gasto) => gasto.categoria === filtro && gasto
+      );
+      setGastoFiltrado(gastosFiltrados);
+    }
+  }, [filtro]);
 
   return (
-    <div className={modal ? 'fijar' : ''}>
+    <div className={modal ? "fijar" : ""}>
       <Header
-        presupuesto = {presupuesto}
-        setPresupuesto = {setPresupuesto}
-        ifValid= {ifValid}
-        setIfValid= {setIfValid}
-        gastos={gastos}        
+        presupuesto={presupuesto}
+        setPresupuesto={setPresupuesto}
+        ifValid={ifValid}
+        setIfValid={setIfValid}
+        gastos={gastos}
       />
-      {
-        modal && 
-       <Modal 
-        setModal = {setModal}
-        transiccion = {transiccion}
-        setTransiccion = {setTransiccion}
-        guardarGasto = {guardarGasto}
-        gastos = {gastos}
-        gastoEditar = {gastoEditar}
-        setGastoEditar = {setGastoEditar}
-       />
-      }
-      {
-        ifValid && (
-          <>
-            <main>
-              <Filtros
-                filtro = {filtro}
-                setFiltro = {setFiltro}
-                setGastoFiltrado = {setGastoFiltrado}
-              />              
-              <ListadoGastos
-                gastos = {gastos}
-                gastoFiltrado = {gastoFiltrado}
-                setGastoEditar = {setGastoEditar}
-                setModal = {setModal}
-                transiccion = {transiccion}
-                setTransiccion = {setTransiccion}
-                modal = {modal}
-                setGastoEliminar = {setGastoEliminar}
-                filtro = {filtro}
-              />                   
-            </main>
-            <div className='nuevo-gasto'>
-              <img 
-                src={IconoNuevo}
-                alt='icono nuevo gasto'
-                onClick={handleNuevoGasto}
-                className={`${modal ? 'ocultarDiv' : ''}`}
-              />
-            </div>
-          </>
-        )
-      }
+      {modal && (
+        <Modal
+          setModal={setModal}
+          transiccion={transiccion}
+          setTransiccion={setTransiccion}
+          guardarGasto={guardarGasto}
+          gastos={gastos}
+          gastoEditar={gastoEditar}
+          setGastoEditar={setGastoEditar}
+        />
+      )}
+      {ifValid && (
+        <>
+          <main>
+            <Filtros
+              filtro={filtro}
+              setFiltro={setFiltro}
+              setGastoFiltrado={setGastoFiltrado}
+            />
+            <ListadoGastos
+              gastos={gastos}
+              gastoFiltrado={gastoFiltrado}
+              setGastoEditar={setGastoEditar}
+              setModal={setModal}
+              transiccion={transiccion}
+              setTransiccion={setTransiccion}
+              modal={modal}
+              setGastoEliminar={setGastoEliminar}
+              filtro={filtro}
+            />
+          </main>
+          <div className="nuevo-gasto">
+            <img
+              src={IconoNuevo}
+              alt="icono nuevo gasto"
+              onClick={handleNuevoGasto}
+              className={`${modal ? "ocultarDiv" : ""}`}
+            />
+          </div>
+        </>
+      )}
     </div>
-
-  )
+  );
 }
 
-export default App
+export default App;
